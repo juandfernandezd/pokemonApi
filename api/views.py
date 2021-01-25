@@ -5,6 +5,7 @@ from api.serializers import PokemonSerializer
 from rest_framework.views import APIView
 
 
+# Endpoint for get all pokemon information
 class GetPokemon(APIView):
     pokemon_serializer = PokemonSerializer
 

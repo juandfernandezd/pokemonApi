@@ -1,7 +1,7 @@
 from django.contrib.gis.db import models
 
 
-# Model for DataSet description in database
+# Model for Pokemon description in database
 class Pokemon(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -18,6 +18,7 @@ class Pokemon(models.Model):
         return self.name
 
 
+# Model for Pokemon Evolution description in database
 class Evolution(models.Model):
     PREEVOLUTION = 'preevolution'
     EVOLUTION = 'evolution'
@@ -39,8 +40,8 @@ class Evolution(models.Model):
         return self.evolution.name + " " + self.type
 
 
+# Model for Pokemon Stats description in database
 class Stat(models.Model):
-
     type = models.CharField(max_length=18)
     pokemon = models.ForeignKey(Pokemon, related_name='stats', on_delete=models.CASCADE)
     base_stat = models.FloatField()

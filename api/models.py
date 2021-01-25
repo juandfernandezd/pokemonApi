@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 
+
 # Model for DataSet description in database
 class Pokemon(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -16,6 +17,7 @@ class Pokemon(models.Model):
     def __str__(self):
         return self.name
 
+
 class Evolution(models.Model):
     PREEVOLUTION = 'preevolution'
     EVOLUTION = 'evolution'
@@ -25,12 +27,13 @@ class Evolution(models.Model):
     ]
     type = models.CharField(max_length=12, choices=EVOLUTION_TYPES, default=EVOLUTION)
     pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
+    evolution = models.ForeignKey(Pokemon, related_name='evolutions', on_delete=models.CASCADE)
 
     @classmethod
-    def create(cls, type, pokemon):
-        evolution = cls(type=type, pokemon=pokemon)
+    def create(cls, type, pokemon, evolution):
+        evolution = cls(type=type, pokemon=pokemon, evolution=evolution)
         evolution.save()
         return evolution
 
     def __str__(self):
-        return self.type
+        return self.evolution.name + " " + self.type

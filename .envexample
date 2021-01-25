@@ -1,0 +1,7 @@
+SECRET_KEY=$3$ivlusp))o777z^h94u&1xwqqmw0$u(_jq=-55t+k&w=4e&d
+DEBUG=True
+DB_NAME=db_name
+DB_USER=dh_user
+DB_PASSWORD=db_password
+DB_HOST=db_host
+DB_PORT=5432

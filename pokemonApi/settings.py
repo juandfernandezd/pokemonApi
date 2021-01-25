@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$3$ivlusp))o777z^h94u&1xwqqmw0$u(_jq=-55t+k&w=4e&d'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -79,15 +80,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
 
-        'NAME': 'pokemon_db',
+        'NAME': config('DB_NAME'),
 
-        'USER': 'postgres',
+        'USER': config('DB_USER'),
 
-        'PASSWORD': 'orson123',
+        'PASSWORD': config('DB_PASSWORD'),
 
-        'HOST': 'localhost',
+        'HOST': config('DB_HOST'),
 
-        'PORT': '5432',
+        'PORT': config('DB_PORT'),
     }
 }
 

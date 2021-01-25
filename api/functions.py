@@ -1,4 +1,4 @@
-from api.models import Evolution, Pokemon
+from api.models import Evolution, Pokemon, Stat
 import requests
 
 
@@ -9,19 +9,29 @@ def get_pokemon_info(name):
     pk = data_info['id']
     height = data_info['height']
     weight = data_info['weight']
-    return pk, height, weight
+    stats = data_info['stats']
+    return pk, height, weight, stats
+
+
+def register_stats(pokemon, stats):
+    for stat in stats:
+        stat_name = stat['stat']['name']
+        stat_value = stat['base_stat']
+        Stat.create(stat_name, pokemon, stat_value)
 
 
 def insert_evolutions(evolves_to, before):
     if len(evolves_to) > 0:
         for evolves in evolves_to:
             name = evolves['species']['name']
-            pk, height, weight = get_pokemon_info(name)
+            pk, height, weight, stats = get_pokemon_info(name)
             actual = Pokemon.create(pk, name, height, weight)
+            register_stats(actual, stats)
             for poke in before:
                 Evolution.create(Evolution.EVOLUTION, actual, poke)
                 Evolution.create(Evolution.PREEVOLUTION, poke, actual)
-            before.append(actual)
+            if len(evolves_to) == 1:
+                before.append(actual)
         if len(evolves['evolves_to']) > 0:
             return insert_evolutions(evolves['evolves_to'], before)
         else:
@@ -34,13 +44,14 @@ def register_evolution(evolution_chain_id: int):
     if r_chain.status_code == 200:
         data_chain = r_chain.json()
         name = data_chain['chain']['species']['name']
-        pk, height, weight = get_pokemon_info(name)
+        pk, height, weight, stats = get_pokemon_info(name)
         exist = Pokemon.objects.filter(id=pk)
 
         if len(exist) > 0:
             return 'Pokemon already exist'
         else:
             actual = Pokemon.create(pk, name, height, weight)
+            register_stats(actual, stats)
             insert_evolutions(data_chain['chain']['evolves_to'], [actual])
             return 'Pokemon has been registered'
     else:

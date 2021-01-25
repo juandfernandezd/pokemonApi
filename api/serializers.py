@@ -1,4 +1,4 @@
-from api.models import Pokemon, Evolution
+from api.models import Pokemon, Evolution, Stat
 from rest_framework.serializers import ModelSerializer
 
 
@@ -18,12 +18,20 @@ class EvolutionSerializer(ModelSerializer):
         fields = ('type', 'pokemon')
 
 
+# Serializer class for pokemon stat
+class StatSerializer(ModelSerializer):
+
+    class Meta:
+        model = Stat
+        fields = ('type', 'base_stat')
+
+
 # Serializer class for Pokemon and nested evolutions
 class PokemonSerializer(ModelSerializer):
     evolutions = EvolutionSerializer(many=True)
+    stats = StatSerializer(many=True)
 
     class Meta:
         model = Pokemon
-        fields = ('id', 'name', 'height', 'weight', 'evolutions')
-
+        fields = ('id', 'name', 'height', 'weight', 'stats', 'evolutions')
 

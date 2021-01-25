@@ -37,3 +37,19 @@ class Evolution(models.Model):
 
     def __str__(self):
         return self.evolution.name + " " + self.type
+
+
+class Stat(models.Model):
+
+    type = models.CharField(max_length=18)
+    pokemon = models.ForeignKey(Pokemon, related_name='stats', on_delete=models.CASCADE)
+    base_stat = models.FloatField()
+
+    @classmethod
+    def create(cls, type, pokemon, base_stat):
+        stat = cls(type=type, pokemon=pokemon, base_stat=base_stat)
+        stat.save()
+        return stat
+
+    def __str__(self):
+        return self.pokemon.name + " " + self.type + " " + self.base_stat
